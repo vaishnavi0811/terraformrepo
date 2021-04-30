@@ -11,6 +11,10 @@ on:
         description: "Azure location"
         default: "east us"
         required: true
+      recreate:
+        description: "Delete and create the resources. Give yes or no"
+        default: "no"
+        required: false
   #push:
     #branches:
       #- dependabot/npm_and_yarn/ini-1.3.7
@@ -29,11 +33,12 @@ jobs:
       #- name: login to Azure
         #run: az login --service-principal --username ${{ secrets.CLIENT_ID }} --password ${{ secrets.CLIENT_SECRET }} --tenant ${{ secrets.TENANT_ID }}
       - name: run terraform init
-        run:  |
-          
-          echo $ARM_CLIENT_ID
-          terraform init
+        run:  terraform init
         working-directory:  vnet
+
+      - name: run terraform destroy
+        if: ${{ github.event.inputs.recreate == "yes" }}
+        run: terraform destroy --auto-approve -var="location=${{ github.event.inputs.location }}" -var="rgName=${{ github.event.inputs.rgName }}" -var="client_id=${{ secrets.ARM_CLIENT_ID }}" -var="client_secret=${{ secrets.ARM_CLIENT_SECRET }}" -var="tenant_id=${{ secrets.ARM_TENANT_ID }}" -var="subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}"
 
       - name: run terraform plan
         run: terraform plan -var="location=${{ github.event.inputs.location }}" -var="rgName=${{ github.event.inputs.rgName }}" -var="client_id=${{ secrets.ARM_CLIENT_ID }}" -var="client_secret=${{ secrets.ARM_CLIENT_SECRET }}" -var="tenant_id=${{ secrets.ARM_TENANT_ID }}" -var="subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}"
@@ -41,5 +46,4 @@ jobs:
 
       - name: run terraform apply
         run: terraform apply -auto-approve -var="location=${{ github.event.inputs.location }}" -var="rgName=${{ github.event.inputs.rgName }}" -var="client_id=${{ secrets.ARM_CLIENT_ID }}" -var="client_secret=${{ secrets.ARM_CLIENT_SECRET }}" -var="tenant_id=${{ secrets.ARM_TENANT_ID }}" -var="subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}"
-        working-directory:  vnet
-      
+        working-directory:  vnet    
