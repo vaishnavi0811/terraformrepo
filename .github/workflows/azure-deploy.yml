@@ -25,11 +25,13 @@ jobs:
       #- name: login to Azure
         #run: az login --service-principal --username ${{ secrets.CLIENT_ID }} --password ${{ secrets.CLIENT_SECRET }} --tenant ${{ secrets.TENANT_ID }}
       - name: set env variable
-        run:  export ARM_CLIENT_ID="ARMCLIENT"
+        run:  |
+          export ARM_CLIENT_ID="ARMCLIENT"
+          echo $ARM_CLIENT_ID
         
       - name: Run terraform init
         id: init
-        run: echo $ARM_CLIENT_ID
+        run: print env
         working-directory: vnet
 
       
