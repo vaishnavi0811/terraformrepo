@@ -24,7 +24,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v1.2.1
       #- name: login to Azure
         #run: az login --service-principal --username ${{ secrets.CLIENT_ID }} --password ${{ secrets.CLIENT_SECRET }} --tenant ${{ secrets.TENANT_ID }}
-      - name: set env variable
+      - name: run terraform init
         run:  |
           export ARM_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }}
           export ARM_CLIENT_SECRET=${{ secrets.ARM_CLIENT_SECRET }}
@@ -34,4 +34,7 @@ jobs:
           terraform init
         working-directory:  vnet
 
+      - name: run terraform plan
+        run: terraform plan -var="location=${{ github.event.inputs.location }}" -var="rgName=${{ github.event.inputs.rgName }}" -var="client_id=${{ secrets.ARM_CLIENT_ID }}" -var="client_secret=${{ secrets.ARM_CLIENT_SECRET }}" -var="tenant_id=${{ secrets.ARM_TENANT_ID }}" -var="subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}"
+        working-directory:  vnet
       
