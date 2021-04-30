@@ -39,7 +39,7 @@ jobs:
         run: terraform plan -var="location=${{ github.event.inputs.location }}" -var="rgName=${{ github.event.inputs.rgName }}" -var="client_id=${{ secrets.ARM_CLIENT_ID }}" -var="client_secret=${{ secrets.ARM_CLIENT_SECRET }}" -var="tenant_id=${{ secrets.ARM_TENANT_ID }}" -var="subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}"
         working-directory:  vnet
 
-      - name: run terraform plan
+      - name: run terraform apply
         run: terraform apply -auto-approve -var="location=${{ github.event.inputs.location }}" -var="rgName=${{ github.event.inputs.rgName }}" -var="client_id=${{ secrets.ARM_CLIENT_ID }}" -var="client_secret=${{ secrets.ARM_CLIENT_SECRET }}" -var="tenant_id=${{ secrets.ARM_TENANT_ID }}" -var="subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}"
         working-directory:  vnet
       
