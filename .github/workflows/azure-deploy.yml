@@ -32,7 +32,7 @@ jobs:
           export ARM_TENANT_ID=${{ secrets.ARM_TENANT_ID }}
           echo $ARM_CLIENT_ID
           terraform init
-        working-directory:  vnet
+        working-directory:  vnet/provider
 
       - name: run terraform plan
         run: terraform plan -var="location=${{ github.event.inputs.location }}" -var="rgName=${{ github.event.inputs.rgName }}" -var="client_id=${{ secrets.ARM_CLIENT_ID }}" -var="client_secret=${{ secrets.ARM_CLIENT_SECRET }}" -var="tenant_id=${{ secrets.ARM_TENANT_ID }}" -var="subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}"

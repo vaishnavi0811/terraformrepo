@@ -16,14 +16,7 @@ variable "subscription_id" {
 variable "tenant_id" {
   type = string
 }
-terraform {
-  backend "azurerm" {
-    resource_group_name  = "32943"
-    storage_account_name = "cloudlegonewstorage"
-    container_name       = "tfstate"
-    key                  = "dev.terraform.tfstate"
-  }
-}
+
 provider "azurerm" {
    client_id = var.client_id
 	 client_secret = var.client_secret
