@@ -28,10 +28,7 @@ jobs:
         run:  |
           export ARM_CLIENT_ID="ARMCLIENT"
           echo $ARM_CLIENT_ID
-        
-      - name: Run terraform init
-        id: init
-        run: print env
-        working-directory: vnet
+          terraform init
+        working-directory:  vnet
 
       
