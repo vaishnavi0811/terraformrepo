@@ -11,7 +11,11 @@ on:
         description: "Azure location"
         default: "east us"
         required: true
-      recreate:
+      delete:
+        description: "Delete and create the resources. Give yes or no"
+        default: "no"
+        required: false
+      create:
         description: "Delete and create the resources. Give yes or no"
         default: "no"
         required: false
@@ -37,7 +41,7 @@ jobs:
         working-directory:  vnet
 
       - name: run terraform destroy
-        if: ${{ github.event.inputs.recreate == 'yes' }}
+        if: ${{ github.event.inputs.delete == 'yes' }}
         run: terraform destroy --auto-approve -var="location=${{ github.event.inputs.location }}" -var="rgName=${{ github.event.inputs.rgName }}" -var="client_id=${{ secrets.ARM_CLIENT_ID }}" -var="client_secret=${{ secrets.ARM_CLIENT_SECRET }}" -var="tenant_id=${{ secrets.ARM_TENANT_ID }}" -var="subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}"
         working-directory:  vnet
 
@@ -46,5 +50,6 @@ jobs:
         working-directory:  vnet
 
       - name: run terraform apply
+        if: ${{ github.event.inputs.create == 'yes' }}
         run: terraform apply -auto-approve -var="location=${{ github.event.inputs.location }}" -var="rgName=${{ github.event.inputs.rgName }}" -var="client_id=${{ secrets.ARM_CLIENT_ID }}" -var="client_secret=${{ secrets.ARM_CLIENT_SECRET }}" -var="tenant_id=${{ secrets.ARM_TENANT_ID }}" -var="subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}"
         working-directory:  vnet    
