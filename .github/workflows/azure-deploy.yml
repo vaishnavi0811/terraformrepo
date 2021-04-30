@@ -18,7 +18,11 @@ on:
 jobs:  
   Infra-vnet:
     runs-on: ubuntu-latest
-
+    env:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
     steps:  
       - uses: actions/checkout@v2
       - uses: hashicorp/setup-terraform@v1.2.1
@@ -26,13 +30,10 @@ jobs:
         #run: az login --service-principal --username ${{ secrets.CLIENT_ID }} --password ${{ secrets.CLIENT_SECRET }} --tenant ${{ secrets.TENANT_ID }}
       - name: run terraform init
         run:  |
-          export ARM_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }}
-          export ARM_CLIENT_SECRET=${{ secrets.ARM_CLIENT_SECRET }}
-          export ARM_SUBSCRIPTION_ID=${{ secrets.ARM_SUBSCRIPTION_ID }}
-          export ARM_TENANT_ID=${{ secrets.ARM_TENANT_ID }}
+          
           echo $ARM_CLIENT_ID
           terraform init
-        working-directory:  vnet/provider
+        working-directory:  vnet
 
       - name: run terraform plan
         run: terraform plan -var="location=${{ github.event.inputs.location }}" -var="rgName=${{ github.event.inputs.rgName }}" -var="client_id=${{ secrets.ARM_CLIENT_ID }}" -var="client_secret=${{ secrets.ARM_CLIENT_SECRET }}" -var="tenant_id=${{ secrets.ARM_TENANT_ID }}" -var="subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}"
