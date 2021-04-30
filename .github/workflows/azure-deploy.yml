@@ -1,0 +1,35 @@
+name: Build Azure Virtual Network
+
+on:
+  workflow_dispatch:
+    inputs:
+      rgName:
+        description: "resource group name"
+        default: "32943"
+        required: true
+      location:
+        description: "Azure location"
+        default: "east us"
+        required: true
+  #push:
+    #branches:
+      #- dependabot/npm_and_yarn/ini-1.3.7
+
+jobs:  
+  Infra-vnet:
+    runs-on: ubuntu-latest
+
+    steps:  
+      - uses: actions/checkout@v2
+      - uses: hashicorp/setup-terraform@v1.2.1
+      #- name: login to Azure
+        #run: az login --service-principal --username ${{ secrets.CLIENT_ID }} --password ${{ secrets.CLIENT_SECRET }} --tenant ${{ secrets.TENANT_ID }}
+      - name: set env variable
+        run:  export ARM_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }}
+        
+      - name: Run terraform init
+        id: init
+        run: echo $ARM_CLIENT_ID
+        working-directory: vnet
+
+      
