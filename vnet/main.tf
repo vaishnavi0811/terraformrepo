@@ -4,32 +4,21 @@ variable "location"{
 variable "rgName"{
   type = string
 }
-variable "client_id" {
+variable "backendstorage" {
   type = string
 }
-variable "client_secret" {
-  type = string
-}
-variable "subscription_id" {
-  type = string
-}
-variable "tenant_id" {
-  type = string
-}
+variable "backendcontainer" {}
+variable "backendkey" {}
+
 terraform {
   backend "azurerm" {
-    resource_group_name  = "32943"
-    storage_account_name = "cloudlegonewstorage"
-    container_name       = "tfstate"
-    key                  = "dev.terraform.tfstate"
+    resource_group_name  = var.rgName
+    storage_account_name = var.backendstorage
+    container_name       = var.backendcontainer
+    key                  = var.backendkey
   }
 }
 provider "azurerm" {
-   client_id = var.client_id
-	 client_secret = var.client_secret
-	 subscription_id = var.subscription_id
-	 tenant_id = var.tenant_id
-	 
 	 features {}
 }
 resource "azurerm_virtual_network" "example" {
@@ -38,23 +27,6 @@ resource "azurerm_virtual_network" "example" {
   resource_group_name = var.rgName
   address_space       = ["10.0.0.0/16"]
   dns_servers         = ["10.0.0.4", "10.0.0.5"]
-
-  
-  subnet {
-    name           = "subnet1"
-    address_prefix = "10.0.1.0/24"
-  }
-
-  subnet {
-    name           = "subnet2"
-    address_prefix = "10.0.2.0/24"
-  }
-
-  subnet {
-    name           = "subnet3"
-    address_prefix = "10.0.3.0/24"
-    
-  }
 
   tags = {
     environment = "Production"
