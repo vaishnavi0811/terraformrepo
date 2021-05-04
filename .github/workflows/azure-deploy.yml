@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       delete:
-        description: "Delete and create the resources. Give yes or no"
+        description: "Delete resources. Give yes or no"
         default: "no"
         required: false
       create:
-        description: "Delete and create the resources. Give yes or no"
+        description: "Create resources. Give yes or no"
         default: "no"
         required: false
   #push:
