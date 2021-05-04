@@ -3,14 +3,6 @@ name: Build Azure Virtual Network
 on:
   workflow_dispatch:
     inputs:
-      rgName:
-        description: "resource group name"
-        default: "32943"
-        required: true
-      location:
-        description: "Azure location"
-        default: "east us"
-        required: true
       delete:
         description: "Delete and create the resources. Give yes or no"
         default: "no"
@@ -34,22 +26,20 @@ jobs:
     steps:  
       - uses: actions/checkout@v2
       - uses: hashicorp/setup-terraform@v1.2.1
-      #- name: login to Azure
-        #run: az login --service-principal --username ${{ secrets.CLIENT_ID }} --password ${{ secrets.CLIENT_SECRET }} --tenant ${{ secrets.TENANT_ID }}
       - name: run terraform init
         run:  terraform init
-        working-directory:  vnet
+        working-directory: vnet
 
       - name: run terraform destroy
         if: ${{ github.event.inputs.delete == 'yes' }}
-        run: terraform destroy --auto-approve -var="location=${{ github.event.inputs.location }}" -var="rgName=${{ github.event.inputs.rgName }}" -var="client_id=${{ secrets.ARM_CLIENT_ID }}" -var="client_secret=${{ secrets.ARM_CLIENT_SECRET }}" -var="tenant_id=${{ secrets.ARM_TENANT_ID }}" -var="subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}"
-        working-directory:  vnet
+        run: terraform destroy --auto-approve
+        working-directory: vnet
 
       - name: run terraform plan
-        run: terraform plan -var="location=${{ github.event.inputs.location }}" -var="rgName=${{ github.event.inputs.rgName }}" -var="client_id=${{ secrets.ARM_CLIENT_ID }}" -var="client_secret=${{ secrets.ARM_CLIENT_SECRET }}" -var="tenant_id=${{ secrets.ARM_TENANT_ID }}" -var="subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}"
-        working-directory:  vnet
+        run: terraform plan
+        working-directory: vnet
 
       - name: run terraform apply
         if: ${{ github.event.inputs.create == 'yes' }}
-        run: terraform apply -auto-approve -var="location=${{ github.event.inputs.location }}" -var="rgName=${{ github.event.inputs.rgName }}" -var="client_id=${{ secrets.ARM_CLIENT_ID }}" -var="client_secret=${{ secrets.ARM_CLIENT_SECRET }}" -var="tenant_id=${{ secrets.ARM_TENANT_ID }}" -var="subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}"
-        working-directory:  vnet    
+        run: terraform apply
+        working-directory: vnet
