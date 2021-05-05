@@ -31,5 +31,5 @@ jobs:
         working-directory: vnet
 
       - name: run terraform apply
-        run: terraform apply
+        run: terraform apply --auto-approve
         working-directory: vnet

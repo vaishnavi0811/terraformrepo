@@ -22,19 +22,8 @@ variable "environment_name" {
   type    = string
   default = "dev_1"
 }
-variable "backendstorage" {
-  type    = string
-  default = "cloudlegonewstorage"
-}
-variable "backendcontainer" {
-  type    = string
-  default = "tfstate"
-}
-
 terraform {
-  backend "azurerm" {
-
-  }
+  backend "azurerm" {}
 }
 provider "azurerm" {
   features {}
