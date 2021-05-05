@@ -38,7 +38,7 @@ resource "azurerm_virtual_network" "hubvnet" {
   resource_group_name = var.rgName
   address_space       = [var.hub_vnet_address_space]
   dns_servers         = ["10.0.0.4", "10.0.0.5"]
-
+  depends_on          = [azurerm_resource_group.HUBResourceGroup]
   tags = {
     environment = var.environment_name
   }
@@ -47,6 +47,7 @@ resource "azurerm_network_security_group" "HUBNSG" {
   location            = var.location
   name                = "NSG01"
   resource_group_name = var.rgName
+  depends_on          = [azurerm_resource_group.HUBResourceGroup]
   tags = {
     environment = var.environment_name
   }
@@ -56,8 +57,16 @@ resource "azurerm_subnet" "hubsubnet" {
   resource_group_name  = var.rgName
   virtual_network_name = azurerm_virtual_network.hubvnet.name
   address_prefixes     = [var.hub_subnet_address_space]
+  depends_on = [azurerm_resource_group.HUBResourceGroup,
+    azurerm_virtual_network.hubvnet,
+    azurerm_network_security_group.HUBNSG
+  ]
 }
 resource "azurerm_subnet_network_security_group_association" "hub_subnet_hub_nsg" {
   network_security_group_id = azurerm_network_security_group.HUBNSG.id
   subnet_id                 = azurerm_subnet.hubsubnet.id
+  depends_on = [azurerm_resource_group.HUBResourceGroup,
+    azurerm_virtual_network.hubvnet,
+    azurerm_network_security_group.HUBNSG
+  ]
 }
