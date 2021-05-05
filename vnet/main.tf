@@ -33,10 +33,7 @@ variable "backendcontainer" {
 
 terraform {
   backend "azurerm" {
-    resource_group_name  = var.rgName
-    storage_account_name = var.backendstorage
-    container_name       = var.backendcontainer
-    key                  = "${var.environment_name}-state.tfstate"
+
   }
 }
 provider "azurerm" {
